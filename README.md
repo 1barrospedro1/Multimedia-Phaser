@@ -6,7 +6,8 @@
 
 ## Project Setup
 * **Phaser Version:** v3.90.0
-* **Inclusion Method:** npm 
+* **Inclusion Method:** npm
+* **GitHub Pages:** https://1barrospedro1.github.io/Multimedia-Phaser/
 
 ## Game Description
 * **Genre:** 
