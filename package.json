@@ -1,0 +1,28 @@
+{
+  "name": "multimedia-phaser",
+  "version": "1.0.0",
+  "description": "* **Pedro Barros** - Number: 33248 \r * **Diogo Moreira** - Number: 33409",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "serve ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/1barrospedro1/Multimedia-Phaser.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/1barrospedro1/Multimedia-Phaser/issues"
+  },
+  "homepage": "https://github.com/1barrospedro1/Multimedia-Phaser#readme",
+  "dependencies": {
+    "phaser": "^3.90.0"
+  },
+  "devDependencies": {
+    "serve": "^14.2.6"
+  }
+}
