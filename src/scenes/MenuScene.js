@@ -11,9 +11,12 @@ export default class MenuScene extends Phaser.Scene {
         this.load.image('cursor', 'assets/images/cursor.png');
         this.load.image('btn_normal', 'assets/images/button.png');
         this.load.image('ui_container', 'assets/images/ui_container.png');
+        this.load.image('menu_bg', 'assets/images/menu_background.jpg');
     }
 
     create() {
+        // Imagem background
+        const bg = this.add.image(640, 360, 'menu_bg');
         // 1. Título do Jogo 
         this.add.text(640, 120, '[RPG NAME]', { 
             fontSize: '64px', 
