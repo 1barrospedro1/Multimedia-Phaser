@@ -9,9 +9,9 @@ export default class MenuScene extends Phaser.Scene {
 
     preload() {
         this.load.image('cursor', 'assets/images/cursor.png');
-        this.load.image('btn_normal', 'assets/images/button.png');
         this.load.image('ui_container', 'assets/images/ui_container.png');
         this.load.image('menu_bg', 'assets/images/menu_background.jpg');
+        this.load.image('btn_normal', 'assets/images/scroll_button.png');
     }
 
     create() {
@@ -19,9 +19,9 @@ export default class MenuScene extends Phaser.Scene {
         const bg = this.add.image(640, 360, 'menu_bg');
         // 1. Título do Jogo 
         this.add.text(640, 120, '[RPG NAME]', { 
+            fontFamily: 'Antiquity',
             fontSize: '64px', 
             fill: '#ffffff',
-            fontStyle: 'bold',
             stroke: '#000000', 
             strokeThickness: 6
         }).setOrigin(0.5);
@@ -60,15 +60,16 @@ export default class MenuScene extends Phaser.Scene {
         const btnImage = this.add.image(x, y, 'btn_normal').setInteractive();
         
         // Ajustar escala do botão para o novo ecrã maior
-        btnImage.setScale(3.5);
+        btnImage.setScale(0.5);
 
         // B. Criar o Texto por cima da Imagem (nas mesmas coordenadas)
         this.add.text(x, y, textString, { 
-            fontSize: '28px', 
-            fill: '#ffffff', // Letra preta para contraste
-            fontStyle: 'bold',
-            stroke: '#000000', 
-            strokeThickness: 3
+            fontFamily: 'Antiquity', // Adicionar a fonte
+            fontSize: '24px', // Aumentar o tamanho do texto do botão
+            fill: '#000000', // Aconselho PRETO no pergaminho claro para estilo "tinta antiga"
+            // fontStyle: 'bold', // APAGAR ESTA LINHA
+            // stroke: '#000000', // APAGAR O STROKE PARA TEXTO PRETO
+            // strokeThickness: 3 // APAGAR O STROKE
         }).setOrigin(0.5);
 
         // C. Configurar Efeitos Visuais de Interação (Feedback para o jogador)

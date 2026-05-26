@@ -1,16 +1,35 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>O Meu Jogo Phaser</title>
+    <title>RPG GAME</title>
     <style>
-        body { margin: 0; padding: 0; background-color: #333; }
-        canvas { display: block; margin: 0 auto; }
+        /* 1. Declarar a fonte personalizada */
+        @font-face {
+            font-family: 'Antiquity';
+            src: url('./assets/fonts/antiquity.ttf') format('truetype');
+        }
+
+        /* 2. Truque para forçar o carregamento da fonte */
+        .font-preload {
+            font-family: 'Antiquity';
+            visibility: hidden;
+            position: absolute;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #222;
+        }
     </style>
-    <script src="node_modules/phaser/dist/phaser.js"></script>
-    <script type="module" src="src/main.js"></script>
 </head>
 <body>
+    <div class="font-preload">.</div>
+    
+    <script src="node_modules/phaser/dist/phaser.js"></script>
+    
+    <script type="module" src="src/main.js"></script>
 </body>
 </html>
