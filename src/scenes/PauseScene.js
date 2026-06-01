@@ -45,6 +45,10 @@ export default class PauseScene extends Phaser.Scene {
             this.scene.stop('GameScene');
             this.scene.start('MenuScene');
         });
+
+        this.events.on('wake', () => {
+            this.scene.restart();
+        });
     }
 
     createButton(x, y, textString, callback) {
