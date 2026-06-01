@@ -7,15 +7,23 @@ export default class OptionsScene extends Phaser.Scene {
         super('OptionsScene');
     }
 
-    create() {
+    create(data) {
+        this.scene.bringToTop();
+        
+        const sceneToReturn = data?.fromScene || 'MenuScene';
+
         // 1. Ir buscar o idioma atual
         const langAtual = this.registry.get('idioma');
         const textos = this.cache.json.get(langAtual);
 
-        // 2. Fundo e Contentor 
-        const bg = this.add.image(640, 360, 'menu_bg');
-        bg.setScale(1280 / bg.width); 
-        
+        // 2. Fundo e Contentor
+        if (sceneToReturn === 'MenuScene') {
+            const bg = this.add.image(640, 360, 'menu_bg');
+            bg.setScale(1280 / bg.width);
+        } else if (sceneToReturn === 'PauseScene') {
+            this.add.rectangle(640, 360, 1280, 720, 0x000000, 0.7);
+        }
+
         const container = this.add.image(640, 420, 'ui_container');
         container.setScale(4);
 
@@ -37,12 +45,17 @@ export default class OptionsScene extends Phaser.Scene {
             this.registry.set('idioma', novoIdioma);
             
             // Reinicia esta cena para os textos atualizarem instantaneamente
-            this.scene.restart();
+            this.scene.restart({ fromScene: sceneToReturn });
         });
 
-        // 5. Botão Voltar ao Menu Principal
+        // 5. Botão Voltar
         this.createButton(640, 460, textos.BACK, () => {
-            this.scene.start('MenuScene');
+            if (sceneToReturn === 'PauseScene') {
+                this.scene.stop();
+                this.scene.wake('PauseScene');
+            } else {
+                this.scene.start('MenuScene');
+            }
         });
     }
 

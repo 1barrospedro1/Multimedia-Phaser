@@ -4,5 +4,8 @@
     "SETTINGS": "Opções",
     "QUIT": "Sair",
     "BACK": "Voltar",
-    "LANG_BTN": "Idioma: PT"
+    "LANG_BTN": "Idioma: PT",
+    "RESUME": "Continuar",
+    "MAIN_MENU": "Menu Principal",
+    "PAUSED": "PAUSA"
 }

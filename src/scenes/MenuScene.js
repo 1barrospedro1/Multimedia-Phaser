@@ -51,13 +51,13 @@ export default class MenuScene extends Phaser.Scene {
         // Botão Play (Substituído por textos.PLAY)
         this.createButton(640, 380, textos.PLAY, () => {
             console.log("Iniciar Jogo!");
-            // this.scene.start('GameScene');
+            this.scene.start('GameScene');
         });
 
         // Botão Settings 
         this.createButton(640, 460, textos.SETTINGS, () => {
             console.log("Abrir Opções!");
-            this.scene.start('OptionsScene');
+            this.scene.start('OptionsScene', { fromScene: 'MenuScene' });
         });
 
         // Botão Exit 
