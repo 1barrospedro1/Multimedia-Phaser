@@ -4,6 +4,7 @@
 
 // Importação das Cenas do Jogo (Modularização do projeto)
 import MenuScene from './scenes/MenuScene.js';
+import OptionsScene from './scenes/OptionsScene.js'; 
 
 /**
  * Configuração Global do Motor Phaser 3
@@ -48,7 +49,7 @@ const config = {
      * O Phaser carrega e inicializa automaticamente a primeira cena desta lista.
      * À medida que novas cenas forem criadas (GameScene, GameOverScene), basta adicioná-las a este Array.
      */
-    scene: [MenuScene]
+    scene: [MenuScene, OptionsScene]
 };
 
 // Inicialização da instância global do jogo com as configurações definidas
