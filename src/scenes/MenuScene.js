@@ -2,39 +2,53 @@
 // MenuScene.js (Cena do Menu Principal)
 // ==============================================================================
 
+/**
+ * Cena do menu principal do jogo.
+ * Responsável pelo carregamento inicial de assets, seleção de idioma via Registry
+ * e navegação para o jogo, opções ou encerramento da aplicação.
+ * @extends Phaser.Scene
+ */
 export default class MenuScene extends Phaser.Scene {
+    /**
+     * Inicializa a cena com o identificador 'MenuScene'.
+     */
     constructor() {
         super('MenuScene');
     }
 
+    /**
+     * Carrega os recursos gráficos e os ficheiros JSON de tradução
+     * necessários nesta e nas restantes cenas do projeto.
+     * @returns {void}
+     */
     preload() {
         this.load.image('cursor', 'assets/images/cursor.png');
         this.load.image('ui_container', 'assets/images/ui_container.png');
         this.load.image('menu_bg', 'assets/images/menu_background.jpg');
         this.load.image('btn_normal', 'assets/images/scroll_button.png');
         
-        // Carregar os ficheiros de idioma
+        // Ficheiros de idioma (en/pt) para o sistema de localização
         this.load.json('en', 'assets/lang/en.json');
         this.load.json('pt', 'assets/lang/pt.json');
     }
 
+    /**
+     * Constrói a interface do menu: fundo, título, painel de botões
+     * e ligações às restantes cenas através do Scene Manager.
+     * @returns {void}
+     */
     create() {
-        // --- SISTEMA DE IDIOMA ---
-        // 1. Definir o idioma padrão (se ainda não existir nenhum definido)
+        // Inicializa o idioma no Registry global (persiste entre cenas)
         if (!this.registry.has('idioma')) {
             this.registry.set('idioma', 'en'); 
         }
 
-        // 2. Ir buscar o JSON correspondente à memória do Phaser
         const langAtual = this.registry.get('idioma');
         const textos = this.cache.json.get(langAtual);
-        // -------------------------
 
-        // Imagem background
         const bg = this.add.image(640, 360, 'menu_bg');
-        bg.setScale(1280 / bg.width); // Garante que a imagem cobre o ecrã a 100%
+        bg.setScale(1280 / bg.width); // Escala proporcional para cobrir o ecrã 1280x720
         
-        // 1. Título do Jogo 
         this.add.text(640, 120, textos.TITLE, { 
             fontFamily: 'Antiquity',
             fontSize: '64px', 
@@ -43,53 +57,49 @@ export default class MenuScene extends Phaser.Scene {
             strokeThickness: 6
         }).setOrigin(0.5);
 
-        // 2. O Contentor / Painel da UI 
         const container = this.add.image(640, 420, 'ui_container');
         container.setScale(4);
 
-        // 3. Criar os Botões
-        // Botão Play (Substituído por textos.PLAY)
         this.createButton(640, 380, textos.PLAY, () => {
             console.log("Iniciar Jogo!");
+            // Transição: substitui o menu pela cena de jogo
             this.scene.start('GameScene');
         });
 
-        // Botão Settings 
         this.createButton(640, 460, textos.SETTINGS, () => {
             console.log("Abrir Opções!");
+            // Transição com contexto de origem para o botão "Voltar" nas opções
             this.scene.start('OptionsScene', { fromScene: 'MenuScene' });
         });
 
-        // Botão Exit 
         this.createButton(640, 540, textos.QUIT, () => {
             console.log("Sair do Jogo!");
+            // Encerra a instância Phaser e liberta recursos do canvas
             this.game.destroy(true);
         });
     }
 
     /**
-     * Função Auxiliar para criar botões gráficos com texto centrado e interações.
-     * Mostra boas práticas de organização de código para a avaliação.
+     * Cria um botão interativo composto por imagem e texto,
+     * com feedback visual de hover e clique.
      * @param {number} x - Coordenada X do centro do botão
      * @param {number} y - Coordenada Y do centro do botão
-     * @param {string} textString - O texto a exibir no botão
-     * @param {function} callback - A função a executar ao clicar
+     * @param {string} textString - Texto localizado a exibir no botão
+     * @param {function} callback - Função executada ao libertar o clique
+     * @returns {void}
      */
     createButton(x, y, textString, callback) {
-        // A. Criar a Imagem do Botão e torná-la interativa
         const btnImage = this.add.image(x, y, 'btn_normal').setInteractive();
         
-        // Ajustar escala do botão
         btnImage.setScale(0.5);
 
-        // B. Criar o Texto por cima da Imagem (nas mesmas coordenadas)
         this.add.text(x, y, textString, { 
             fontFamily: 'Antiquity', 
             fontSize: '24px', 
             fill: '#000000', 
         }).setOrigin(0.5);
 
-        // C. Configurar Efeitos Visuais de Interação (Feedback para o jogador)
+        // Feedback visual: realce ao passar o rato e ao premir
         btnImage.on('pointerover', () => {
             btnImage.setTint(0xdddddd); 
         });
