@@ -7,6 +7,7 @@ import MenuScene from './scenes/MenuScene.js';
 import OptionsScene from './scenes/OptionsScene.js';
 import GameScene from './scenes/GameScene.js';
 import PauseScene from './scenes/PauseScene.js';
+import UIScene from './scenes/UIScene.js';
 
 /**
  * Configuração Global do Motor Phaser 3
@@ -51,7 +52,7 @@ const config = {
      * O Phaser carrega e inicializa automaticamente a primeira cena desta lista.
      * À medida que novas cenas forem criadas (GameScene, GameOverScene), basta adicioná-las a este Array.
      */
-    scene: [MenuScene, OptionsScene, GameScene, PauseScene]
+    scene: [MenuScene, OptionsScene, GameScene, PauseScene, UIScene]
 };
 
 // Inicialização da instância global do jogo com as configurações definidas
