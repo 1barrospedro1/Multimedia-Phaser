@@ -91,6 +91,7 @@ export default class UIScene extends Phaser.Scene {
 
         // ── Subscrever eventos da GameScene ──────────────────────────────────
         const game = this.scene.get('GameScene');
+        this._game = game;
 
         // Estado inicial (a GameScene já criou o jogador quando lança esta cena)
         this.refresh({
@@ -101,11 +102,64 @@ export default class UIScene extends Phaser.Scene {
 
         game.events.on('hud-changed', this.refresh, this);
         game.events.on('game-over', this.showGameOver, this);
+        game.events.on('round-started', this.showRoundBanner, this);
 
         // Liberta os listeners quando a GameScene termina (evita fugas/erros)
         game.events.once('shutdown', () => {
             game.events.off('hud-changed', this.refresh, this);
             game.events.off('game-over', this.showGameOver, this);
+            game.events.off('round-started', this.showRoundBanner, this);
+        });
+
+        // Mostra já o banner da 1ª ronda: o 'round-started' emitido durante o
+        // create() da GameScene ocorre antes desta cena estar pronta para o ouvir
+        this.showRoundBanner(game.round);
+    }
+
+    /**
+     * Mostra um banner animado com o número da ronda no centro do ecrã.
+     * @param {number} round - Número da ronda que está a começar
+     * @returns {void}
+     */
+    showRoundBanner(round) {
+        const W = this._W;
+        const H = this._H;
+
+        const lang   = this.registry.get('idioma');
+        const textos = this.cache.json.get(lang);
+        const label  = `${textos.ROUND} ${round}`;
+
+        const text = this.add.text(W / 2, -60, label, {
+            fontFamily: 'Antiquity',
+            fontSize: '38px',
+            fill: '#f4d03f',
+            stroke: '#000000',
+            strokeThickness: 5
+        }).setOrigin(0.5);
+
+        const centerY = H / 2;
+
+        // 1. Entra pelo topo até ao centro
+        this.tweens.add({
+            targets: text,
+            y: centerY,
+            duration: 400,
+            ease: 'Back.Out',
+            onComplete: () => {
+                // 2. Fica parado 1.5s e depois sai pelo topo
+                this.time.delayedCall(1500, () => {
+                    this.tweens.add({
+                        targets: text,
+                        y: -60,
+                        duration: 350,
+                        ease: 'Back.In',
+                        onComplete: () => {
+                            text.destroy();
+                            this._game.events.emit('round-banner-done');
+                        }
+                    });
+                });
+            }
         });
     }
 

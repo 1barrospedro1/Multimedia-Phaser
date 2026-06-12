@@ -55,6 +55,8 @@ export default class GameScene extends Phaser.Scene {
         this.load.spritesheet('enemy_death', 'assets/sprites/enemy/orc_death.png', f);
 
         this.load.image('arrow', 'assets/sprites/arrow.png');
+
+        this.load.audio('hit_hurt', 'assets/Audios/hitHurt.wav');
     }
 
     create() {
@@ -105,6 +107,9 @@ export default class GameScene extends Phaser.Scene {
             this.fireTimer.remove();
             this._startFireTimer();
         });
+
+        // Só spawna os inimigos da ronda depois do banner desaparecer
+        this.events.on('round-banner-done', this.spawnRoundEnemies, this);
 
         this.setupPause();
     }
@@ -187,11 +192,20 @@ export default class GameScene extends Phaser.Scene {
     }
 
     startRound() {
+        this.roundTransitioning = true;
+        this.updateHud();
+        this.events.emit('round-started', this.round);
+    }
+
+    /**
+     * Spawna os inimigos da ronda atual. Chamado quando o banner da ronda termina.
+     */
+    spawnRoundEnemies() {
         const enemyCount = GameScene.BASE_ENEMY_COUNT + (this.round - 1) * GameScene.ENEMIES_PER_ROUND;
         for (let i = 0; i < enemyCount; i++) {
             this.spawnEnemy();
         }
-        this.updateHud();
+        this.roundTransitioning = false;
     }
 
     fireAtNearestEnemy() {
@@ -246,6 +260,7 @@ export default class GameScene extends Phaser.Scene {
         }
 
         enemy.takeDamage(this.player.damage);
+        this.sound.play('hit_hurt');
 
         if (enemy.dying) {
             this.score += 10;
@@ -315,9 +330,11 @@ export default class GameScene extends Phaser.Scene {
             enemy.update();
         }
 
-        if (this.enemies.getChildren().length === 0) {
+        if (!this.roundTransitioning && this.enemies.getChildren().length === 0) {
             this.round++;
             this.startRound();
         }
     }
+
+    
 }
