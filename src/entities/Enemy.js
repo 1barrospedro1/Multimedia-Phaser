@@ -8,8 +8,12 @@
  * @extends Phaser.Physics.Arcade.Sprite
  */
 export default class Enemy extends Phaser.Physics.Arcade.Sprite {
-    /** Velocidade de perseguição em píxeis por segundo. */
-    static SPEED = 70;
+
+
+    /** HP base de um inimigo na primeira ronda. */
+    static BASE_HP = 30;
+    /** Velocidade base de um inimigo na primeira ronda. */
+    static BASE_SPEED = 70;
 
     /**
      * Cria o inimigo, regista-o na cena e ativa a física.
@@ -18,7 +22,7 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
      * @param {number} y - Posição inicial Y (em píxeis)
      * @param {Player} target - Jogador a perseguir
      */
-    constructor(scene, x, y, target) {
+    constructor(scene, x, y, target, config = {}) {
         super(scene, x, y, 'enemy_idle');
 
         scene.add.existing(this);
@@ -32,7 +36,9 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
         /** Jogador perseguido. */
         this.target = target;
         /** Pontos de vida atuais. */
-        this.hp = 30;
+        this.hp = config.hp ?? Enemy.BASE_HP;
+        /** Velocidade de movimento. */
+        this.speed = config.speed ?? Enemy.BASE_SPEED;
         /** Indica se o inimigo está em processo de morte (ignora lógica de perseguição). */
         this.dying = false;
 
@@ -102,7 +108,7 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
         if (this.dying || !this.active || !this.target?.active) {
             return;
         }
-        this.scene.physics.moveToObject(this, this.target, Enemy.SPEED);
+        this.scene.physics.moveToObject(this, this.target, this.speed);
         this.setFlipX(this.target.x < this.x);
     }
 }
