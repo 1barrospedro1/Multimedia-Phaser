@@ -4,6 +4,7 @@
 
 import Player from '../entities/Player.js';
 import Enemy from '../entities/Enemy.js';
+import Boss from '../entities/Boss.js';
 
 /**
  * Cena principal de gameplay.
@@ -28,6 +29,8 @@ export default class GameScene extends Phaser.Scene {
     static ENEMY_SPEED_PER_ROUND = 5;
     /** Velocidade máxima que um inimigo pode atingir, independentemente da ronda. */
     static ENEMY_SPEED_CAP = 150;
+    /** De quantas em quantas rondas aparece um Boss. */
+    static BOSS_EVERY_N_ROUNDS = 5;
 
     constructor() {
         super('GameScene');
@@ -54,6 +57,11 @@ export default class GameScene extends Phaser.Scene {
         this.load.spritesheet('enemy_hurt',  'assets/sprites/enemy/orc_hurt.png',  f);
         this.load.spritesheet('enemy_death', 'assets/sprites/enemy/orc_death.png', f);
 
+        this.load.spritesheet('boss_idle',  'assets/sprites/Boss/Idle.png',            { frameWidth: 64, frameHeight: 64 });
+        this.load.spritesheet('boss_walk',  'assets/sprites/Boss/orc1_walk_full.png',  { frameWidth: 64, frameHeight: 59 });
+        this.load.spritesheet('boss_hurt',  'assets/sprites/Boss/orc1_hurt_full.png',  { frameWidth: 64, frameHeight: 63 });
+        this.load.spritesheet('boss_death', 'assets/sprites/Boss/orc1_death_full.png', { frameWidth: 64, frameHeight: 64 });
+
         this.load.image('arrow', 'assets/sprites/arrow.png');
 
         this.load.audio('hit_hurt', 'assets/Audios/hitHurt.wav');
@@ -66,6 +74,7 @@ export default class GameScene extends Phaser.Scene {
 
         Player.createAnims(this);
         Enemy.createAnims(this);
+        Boss.createAnims(this);
 
         this.player = new Player(this, 529, 272);
 
@@ -191,6 +200,25 @@ export default class GameScene extends Phaser.Scene {
         this.enemies.add(enemy);
     }
 
+    spawnBoss() {
+        const margin = 40;
+        const edge = Phaser.Math.Between(0, 3);
+        let x, y;
+        if      (edge === 0) { x = margin;                   y = Phaser.Math.Between(0, this.mapHeight); }
+        else if (edge === 1) { x = this.mapWidth - margin;   y = Phaser.Math.Between(0, this.mapHeight); }
+        else if (edge === 2) { x = Phaser.Math.Between(0, this.mapWidth); y = margin; }
+        else                 { x = Phaser.Math.Between(0, this.mapWidth); y = this.mapHeight - margin; }
+
+        const boss = new Boss(this, x, y, this.player, {
+            hp:    Boss.BASE_HP * Math.pow(1 + GameScene.ENEMY_HP_PER_ROUND / 100, this.round - 1),
+            speed: Math.min(
+                Boss.BASE_SPEED * Math.pow(1 + GameScene.ENEMY_SPEED_PER_ROUND / 100, this.round - 1),
+                GameScene.ENEMY_SPEED_CAP
+            )
+        });
+        this.enemies.add(boss);
+    }
+
     startRound() {
         this.roundTransitioning = true;
         this.updateHud();
@@ -204,6 +232,9 @@ export default class GameScene extends Phaser.Scene {
         const enemyCount = GameScene.BASE_ENEMY_COUNT + (this.round - 1) * GameScene.ENEMIES_PER_ROUND;
         for (let i = 0; i < enemyCount; i++) {
             this.spawnEnemy();
+        }
+        if (this.round % GameScene.BOSS_EVERY_N_ROUNDS === 0) {
+            this.spawnBoss();
         }
         this.roundTransitioning = false;
     }
@@ -260,7 +291,13 @@ export default class GameScene extends Phaser.Scene {
         }
 
         enemy.takeDamage(this.player.damage);
-        this.sound.play('hit_hurt');
+
+        // Só toca o som se já passaram pelo menos 100ms desde o último
+        const now = this.time.now;
+        if (!this._lastHitSound || now - this._lastHitSound > 100) {
+            this.sound.play('hit_hurt');
+            this._lastHitSound = now;
+        }
 
         if (enemy.dying) {
             this.score += 10;
@@ -289,6 +326,7 @@ export default class GameScene extends Phaser.Scene {
 
         this.invulnUntil = this.time.now + GameScene.INVULN_TIME;
         player.hp -= GameScene.ENEMY_DAMAGE;
+        player.pauseRegen();
         this.updateHud();
 
         player.setTint(0xff4444);

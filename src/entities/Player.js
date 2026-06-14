@@ -19,6 +19,10 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     static BASE_XP_TO_LEVEL = 200;
     /** XP ganho por orc morto. */
     static XP_PER_KILL = 10;
+    /** Intervalo (ms) entre ticks de regeneração de HP. */
+    static REGEN_INTERVAL = 3000;
+    /** Tempo (ms) que a regeneração fica em pausa após o jogador levar dano. */
+    static REGEN_PAUSE_AFTER_HIT = 5000;
 
     /**
      * Cria o jogador, regista-o na cena e ativa a física.
@@ -57,6 +61,8 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         this.piercing = false;
         /** HP regenerado por segundo (0 = sem regen). */
         this.regenPerSec = 0;
+        /** Timestamp (scene.time.now) até ao qual a regeneração fica em pausa. */
+        this.regenPausedUntil = 0;
         /** Nº de vezes que cada power-up já foi escolhido (para diminishing returns). */
         this.powerUpCounts = {};
 
@@ -72,7 +78,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
         // Regen timer (só ativo se regenPerSec > 0)
         this._regenTimer = scene.time.addEvent({
-            delay: 1000,
+            delay: Player.REGEN_INTERVAL,
             loop: true,
             callback: this._applyRegen,
             callbackScope: this
@@ -84,11 +90,13 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     /**
-     * Aplica regeneração de HP por segundo (se ativa).
+     * Aplica regeneração de HP (se ativa e não estiver em pausa por dano recente).
      * @private
      */
     _applyRegen() {
         if (this.dead || !this.active || this.regenPerSec <= 0) return;
+        if (this.scene.time.now < this.regenPausedUntil) return;
+
         this.hp = Math.min(this.maxHp, this.hp + this.regenPerSec);
         this.scene.events.emit('hud-changed', {
             hp: this.hp, maxHp: this.maxHp,
@@ -96,6 +104,14 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
             xp: this.xp, xpToLevel: this.xpToLevel,
             speed: this.speed, damage: this.damage, fireRate: this.fireRate
         });
+    }
+
+    /**
+     * Pausa a regeneração de HP durante REGEN_PAUSE_AFTER_HIT ms.
+     * Chamado quando o jogador leva dano.
+     */
+    pauseRegen() {
+        this.regenPausedUntil = this.scene.time.now + Player.REGEN_PAUSE_AFTER_HIT;
     }
 
     /**
