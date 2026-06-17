@@ -133,7 +133,20 @@ export default class CombatSystem {
             const leveledUp = scene.player.addXp(Player.XP_PER_KILL);
             if (leveledUp) scene._triggerLevelUp();
             scene.updateHud();
+
+            if (Math.random() < 0.005) {
+                const potion = scene.potions.create(enemy.x, enemy.y, 'hp_potion').setScale(0.15).refreshBody();
+                potion.pickupAt = scene.time.now + 500;
+            }
         }
+    }
+
+    onPlayerPickupPotion(player, potion) {
+        if (this.scene.time.now < potion.pickupAt) return;
+        if (player.hp >= player.maxHp) return;
+        potion.destroy();
+        player.hp = Math.min(player.maxHp, player.hp + 50);
+        this.scene.updateHud();
     }
 
     onEnemyHitPlayer(player, enemy) {

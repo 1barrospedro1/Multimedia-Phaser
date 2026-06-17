@@ -53,14 +53,36 @@ export default class UIScene extends Phaser.Scene {
         };
 
         // ── Painel superior: HP (esquerda), Round (centro), Score (direita) ──
-        const hpY = TOP_H / 2;
+        const S    = 0.6;   // escala da barra (ajusta aqui para maior/menor)
+        const barX = PADDING;
+        const hpY  = Math.ceil(57 * S / 2) + 4; // garante que o topo não é cortado
 
-        this._hpBar = this.add.graphics();
-        this._hpBarX = PADDING;
-        this._hpBarY = hpY;
+        // Fundo da barra (moldura dourada, 395x57)
+        this.add.image(barX, hpY, 'hp_bg')
+            .setOrigin(0, 0.5)
+            .setScale(S)
+            .setScrollFactor(0);
 
-        // Valor "100/100" ao lado da barra de HP
-        this._hpText = this.add.text(PADDING + BAR_W + 12, hpY, '', style).setOrigin(0, 0.5);
+        // Preenchimento (319x39) — inset de 38px escalado, origem à esquerda
+        this._hpFill = this.add.image(barX + 57 * S, hpY, 'hp_fill')
+            .setOrigin(0, 0.5)
+            .setScale(S)
+            .setScrollFactor(0);
+
+        // Coração na ponta esquerda
+        const heartScale = 0.6;
+        this.add.image(barX + 30 * S, hpY, 'hp_heart')
+            .setOrigin(0.5, 0.5)
+            .setScale(heartScale)
+            .setScrollFactor(0);
+
+        this._hpFillW = 319; // dimensões em coordenadas de textura (sem escala)
+        this._hpFillH = 39;
+        this._hpCropW = 319;
+        this._hpTween = null;
+
+        // Texto HP à direita da barra escalada
+        this._hpText = this.add.text(barX + 395 * S + 10, hpY, '', style).setOrigin(0, 0.5);
 
         // Round ao centro
         this._roundText = this.add.text(W / 2, hpY, '', style).setOrigin(0.5);
@@ -68,20 +90,30 @@ export default class UIScene extends Phaser.Scene {
         // Score à direita
         this._scoreText = this.add.text(W - PADDING, hpY, '', style).setOrigin(1, 0.5);
 
-        // ── Painel inferior: barra de XP ─────────────────────────────────────
-        const xpY = H - BOTTOM_H / 2;
+        // ── Barra de XP: logo abaixo da barra de HP ──
+        const xpY = hpY + 57 * S;
 
-        // Fundo (track) da barra de XP
-        this.add.rectangle(PADDING, xpY, BAR_W, BAR_H, 0x1a1a2e, 0.9)
+        this.add.image(barX, xpY, 'hp_bg')
             .setOrigin(0, 0.5)
-            .setStrokeStyle(2, 0x555555);
+            .setScale(S)
+            .setScrollFactor(0);
 
-        // Preenchimento da barra de XP (roxo, começa vazio)
-        this._xpFill = this.add.rectangle(PADDING + 2, xpY, 0, BAR_H - 4, 0x8e44ad)
-            .setOrigin(0, 0.5);
+        this._xpFill = this.add.image(barX + 57 * S, xpY, 'xp_fill')
+            .setOrigin(0, 0.5)
+            .setDisplaySize(Math.round(319 * S), Math.round(39 * S))
+            .setScrollFactor(0);
+        this._xpFill.postFX.addColorMatrix().brightness(1.5);
 
-        // Valor "0/200" ao lado da barra de XP
-        this._xpText = this.add.text(PADDING + BAR_W + 12, xpY, '', style).setOrigin(0, 0.5);
+        this.add.image(barX + 30 * S, xpY, 'xp_icon')
+            .setOrigin(0.5, 0.5)
+            .setDisplaySize(60, 32)
+            .setScrollFactor(0);
+
+        this._xpFillW = this._xpFill.width;
+        this._xpFillH = this._xpFill.height;
+        this._xpCropW = 0;
+
+        this._xpText = this.add.text(barX + 395 * S + 10, xpY, '', style).setOrigin(0, 0.5);
 
         // ── Dash cooldown (canto inferior direito) ──────────────────────────
         const { DASH_BAR_W } = UIScene;
@@ -230,20 +262,33 @@ export default class UIScene extends Phaser.Scene {
      * @param {number} state.xpToLevel - XP necessário para o próximo nível
      * @returns {void}
      */
+    updateHealthBar(hp, maxHp) {
+        const ratio      = Math.max(0, Math.min(hp / maxHp, 1));
+        const targetCrop = Math.round(this._hpFillW * ratio);
+
+        if (this._hpTween) this._hpTween.stop();
+
+        const counter = { crop: this._hpCropW };
+        this._hpTween = this.tweens.add({
+            targets:  counter,
+            crop:     targetCrop,
+            duration: 250,
+            ease:     'Linear',
+            onUpdate: () => {
+                this._hpFill.setCrop(0, 0, counter.crop, this._hpFillH);
+                this._hpCropW = counter.crop;
+            },
+            onComplete: () => {
+                this._hpFill.setCrop(0, 0, targetCrop, this._hpFillH);
+                this._hpCropW = targetCrop;
+            }
+        });
+    }
+
     refresh({ hp, maxHp, score, round, xp, xpToLevel }) {
         const { BAR_W, BAR_H } = UIScene;
 
-        // Barra de HP estilo pixel art
-        const hpRatio = Math.max(0, Math.min(hp / maxHp, 1));
-        const bx = this._hpBarX;
-        const by = this._hpBarY - BAR_H / 2;
-        this._hpBar.clear();
-        this._hpBar.fillStyle(0x000000);
-        this._hpBar.fillRect(bx - 1, by - 1, BAR_W + 2, BAR_H + 2);
-        this._hpBar.fillStyle(0x333333);
-        this._hpBar.fillRect(bx, by, BAR_W, BAR_H);
-        this._hpBar.fillStyle(0xcc0000);
-        this._hpBar.fillRect(bx, by, Math.ceil(BAR_W * hpRatio), BAR_H);
+        this.updateHealthBar(hp, maxHp);
         this._hpText.setText(`${Math.max(0, hp)}/${maxHp}`);
 
         // Round e Score
@@ -251,8 +296,10 @@ export default class UIScene extends Phaser.Scene {
         this._scoreText.setText(`Score: ${score}`);
 
         // Barra de XP
-        const xpRatio = xpToLevel ? Math.min(xp / xpToLevel, 1) : 0;
-        this._xpFill.setSize((BAR_W - 4) * xpRatio, BAR_H - 4);
+        const xpRatio  = xpToLevel ? Math.min(xp / xpToLevel, 1) : 0;
+        const xpCrop   = Math.round(this._xpFillW * xpRatio);
+        this._xpFill.setCrop(0, 0, xpCrop, this._xpFillH);
+        this._xpCropW  = xpCrop;
         this._xpText.setText(`${xp}/${xpToLevel}`);
     }
 }

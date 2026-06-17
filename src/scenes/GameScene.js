@@ -39,6 +39,13 @@ export default class GameScene extends Phaser.Scene {
         this.load.image('arrow', 'assets/sprites/arrow.png');
         this.load.image('vida_tab', 'assets/tilesets/VidaTab.png');
 
+        this.load.image('hp_bg',    'assets/Lifebar/UI_StatusBar_Bg.png');
+        this.load.image('hp_fill',  'assets/Lifebar/UI_StatusBar_Fill_HP.png');
+        this.load.image('hp_heart', 'assets/Lifebar/UI_Indicator_Heart.png');
+        this.load.image('xp_fill',   'assets/Lifebar/Xp bar.png');
+        this.load.image('xp_icon',   'assets/Lifebar/XP ICon.png');
+        this.load.image('hp_potion', 'assets/Lifebar/HP.png');
+
         for (let i = 1; i <= 12; i++) {
             this.load.image(`explosion_${i}`, `assets/Explosion/${i}.png`);
         }
@@ -65,6 +72,7 @@ export default class GameScene extends Phaser.Scene {
         this.player  = new Player(this, 529, 272);
         this.enemies = this.physics.add.group();
         this.arrows  = this.physics.add.group();
+        this.potions = this.physics.add.staticGroup();
 
         this.cameras.main.setBounds(0, 0, this.mapWidth, this.mapHeight);
         this.cameras.main.startFollow(this.player, true, 0.1, 0.1);
@@ -84,6 +92,8 @@ export default class GameScene extends Phaser.Scene {
             (arrow, enemy) => this.combat.onArrowHitEnemy(arrow, enemy));
         this.physics.add.overlap(this.player, this.enemies,
             (player, enemy) => this.combat.onEnemyHitPlayer(player, enemy));
+        this.physics.add.overlap(this.player, this.potions,
+            (player, potion) => this.combat.onPlayerPickupPotion(player, potion));
 
         this.score       = 0;
         this.invulnUntil = 0;
