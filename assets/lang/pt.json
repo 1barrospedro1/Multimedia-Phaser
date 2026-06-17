@@ -10,26 +10,49 @@
     "PAUSED": "PAUSA",
     "ROUND": "Ronda",
     "LEVEL_UP": "NÍVEL ACIMA!",
-    "CHOOSE_POWER": "Escolhe um Power-Up",
-    "PU_SPEED_NAME": "Botas Velozes",
-    "PU_SPEED_DESC": "Velocidade de mov. +20",
-    "PU_DAMAGE_NAME": "Setas Afiadas",
-    "PU_DAMAGE_DESC": "Dano por seta +10",
-    "PU_FIRERATE_NAME": "Arco Rápido",
-    "PU_FIRERATE_DESC": "Cadência de tiro +15%",
-    "PU_HP_NAME": "Coração de Ferro",
-    "PU_HP_DESC": "+25 HP máx & cura total",
-    "PU_MULTIARROW_NAME": "Tiro Duplo",
-    "PU_MULTIARROW_DESC": "Dispara 2 setas de uma vez",
-    "PU_TRIPLEARROW_NAME": "Tiro Triplo",
-    "PU_TRIPLEARROW_DESC": "Dispara 3 setas de uma vez",
-    "PU_REGEN_NAME": "Regeneração",
-    "PU_REGEN_DESC": "Recupera 2 HP por segundo",
-    "PU_PIERCING_NAME": "Tiro Perfurante",
-    "PU_PIERCING_DESC": "Setas atravessam inimigos",
+    "CHOOSE_POWER": "Escolhe um Upgrade",
     "STAT_HP": "VIDA",
     "STAT_SPD": "VEL",
     "STAT_DMG": "DANO",
     "STAT_RATE": "CADÊNCIA",
-    "STAT_XP": "XP"
+    "STAT_XP": "XP",
+    "GAME_OVER": "GAME OVER",
+    "SCORE": "Pontuação",
+    "PLAY_AGAIN": "Jogar Novamente",
+
+    "PU_HP_NAME": "Vitalidade",
+    "PU_HP_DESC": "+{v} HP máximo",
+
+    "PU_DAMAGE_NAME": "Setas Afiadas",
+    "PU_DAMAGE_DESC": "Dano +{v}",
+
+    "PU_ATTACKSPEED_NAME": "Arco Veloz",
+    "PU_ATTACKSPEED_DESC": "+{v} ataques/seg",
+
+    "PU_CRITCHANCE_NAME": "Olho de Águia",
+    "PU_CRITCHANCE_DESC": "Chance crítica +{v}%",
+
+    "PU_CRITDAMAGE_NAME": "Golpe Fatal",
+    "PU_CRITDAMAGE_DESC": "Dano crítico +{v}%",
+
+    "PU_AOE_NAME": "Seta Explosiva",
+    "PU_AOE_DESC": "Explosão em {v}px ao acertar",
+
+    "PU_CDREDUCTION_NAME": "Agilidade",
+    "PU_CDREDUCTION_DESC": "Cooldown do dash -{v}%",
+
+    "PU_BOUNCE_NAME": "Ricochete",
+    "PU_BOUNCE_DESC": "Setas ricocheteiam +{v}×",
+
+    "PU_PIERCE_NAME": "Perfuração",
+    "PU_PIERCE_DESC": "Setas perfuram +{v} inimigo(s)",
+
+    "PU_SPEED_NAME": "Botas Ágeis",
+    "PU_SPEED_DESC": "Velocidade +{v}",
+
+    "PU_DASHES_NAME": "Dash Extra",
+    "PU_DASHES_DESC": "+{v} cargas de dash",
+
+    "PU_EXTRACHOICE_NAME": "Sorte do Destino",
+    "PU_EXTRACHOICE_DESC": "+{v} opção extra ao subir nível"
 }

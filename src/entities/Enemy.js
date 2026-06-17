@@ -28,6 +28,7 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
         scene.add.existing(this);
         scene.physics.add.existing(this);
 
+        this.setDepth(2);
         this.setScale(0.6);
         this.body.setSize(22, 28);
         this.body.setOffset(39, 50);

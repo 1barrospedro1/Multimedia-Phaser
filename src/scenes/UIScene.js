@@ -17,6 +17,8 @@
 export default class UIScene extends Phaser.Scene {
     /** Largura das barras de HP/XP (píxeis). */
     static BAR_W = 280;
+    /** Largura da barra de cooldown do dash (píxeis). */
+    static DASH_BAR_W = 80;
     /** Altura das barras de HP/XP (píxeis). */
     static BAR_H = 22;
     /** Margem entre as barras e os bordos do ecrã (píxeis). */
@@ -53,14 +55,9 @@ export default class UIScene extends Phaser.Scene {
         // ── Painel superior: HP (esquerda), Round (centro), Score (direita) ──
         const hpY = TOP_H / 2;
 
-        // Fundo (track) da barra de HP
-        this.add.rectangle(PADDING, hpY, BAR_W, BAR_H, 0x1a1a2e, 0.9)
-            .setOrigin(0, 0.5)
-            .setStrokeStyle(2, 0x555555);
-
-        // Preenchimento da barra de HP (cor muda conforme a vida)
-        this._hpFill = this.add.rectangle(PADDING + 2, hpY, BAR_W - 4, BAR_H - 4, 0x2ecc71)
-            .setOrigin(0, 0.5);
+        this._hpBar = this.add.graphics();
+        this._hpBarX = PADDING;
+        this._hpBarY = hpY;
 
         // Valor "100/100" ao lado da barra de HP
         this._hpText = this.add.text(PADDING + BAR_W + 12, hpY, '', style).setOrigin(0, 0.5);
@@ -85,6 +82,26 @@ export default class UIScene extends Phaser.Scene {
 
         // Valor "0/200" ao lado da barra de XP
         this._xpText = this.add.text(PADDING + BAR_W + 12, xpY, '', style).setOrigin(0, 0.5);
+
+        // ── Dash cooldown (canto inferior direito) ──────────────────────────
+        const { DASH_BAR_W } = UIScene;
+        const dashBarX = W - PADDING - DASH_BAR_W;
+        const dashBarY = H - BOTTOM_H / 2;
+
+        this.add.rectangle(dashBarX, dashBarY, DASH_BAR_W, BAR_H, 0x1a1a2e, 0.9)
+            .setOrigin(0, 0.5)
+            .setStrokeStyle(2, 0x555555);
+
+        this._dashFill = this.add.rectangle(dashBarX + 2, dashBarY, DASH_BAR_W - 4, BAR_H - 4, 0x44cc88)
+            .setOrigin(0, 0.5);
+
+        this._dashLabel = this.add.text(dashBarX + DASH_BAR_W / 2, dashBarY, '»» 1/1', {
+            fontFamily: 'Antiquity',
+            fontSize: '13px',
+            fill: '#000000',
+            stroke: '#ffffff',
+            strokeThickness: 2
+        }).setOrigin(0.5).setDepth(1);
 
         this._W = W;
         this._H = H;
@@ -168,13 +185,38 @@ export default class UIScene extends Phaser.Scene {
      * @returns {void}
      */
     showGameOver() {
-        this.add.text(this._W / 2, this._H / 2, 'GAME OVER', {
-            fontFamily: 'Antiquity',
-            fontSize: '72px',
-            fill: '#ff4444',
-            stroke: '#000000',
-            strokeThickness: 8
-        }).setOrigin(0.5);
+        this.scene.launch('GameOverScene', {
+            score: this._game.score,
+            round: this._game.round
+        });
+        this.scene.bringToTop('GameOverScene');
+    }
+
+    /**
+     * Atualiza o indicador de cargas de dash a cada frame.
+     * @returns {void}
+     */
+    update() {
+        const player = this._game?.player;
+        if (!player?.active) return;
+
+        const { currentDashCharges, dashCharges, dashRechargeStart, dashRechargeEnd } = player;
+        const now = this.time.now;
+
+        let ratio, color;
+        if (currentDashCharges >= dashCharges) {
+            ratio = 1;
+            color = 0x44cc88; // verde = cheio
+        } else {
+            const total   = dashRechargeEnd - dashRechargeStart;
+            const elapsed = now - dashRechargeStart;
+            ratio = total > 0 ? Math.max(0, Math.min(1, elapsed / total)) : 0;
+            color = 0x4488ff; // azul = a recarregar
+        }
+
+        this._dashFill.setSize((UIScene.DASH_BAR_W - 4) * ratio, UIScene.BAR_H - 4);
+        this._dashFill.setFillStyle(color);
+        this._dashLabel.setText(`»» ${currentDashCharges}/${dashCharges}`);
     }
 
     /**
@@ -191,12 +233,17 @@ export default class UIScene extends Phaser.Scene {
     refresh({ hp, maxHp, score, round, xp, xpToLevel }) {
         const { BAR_W, BAR_H } = UIScene;
 
-        // Barra de HP: largura proporcional + cor conforme o nível de vida
+        // Barra de HP estilo pixel art
         const hpRatio = Math.max(0, Math.min(hp / maxHp, 1));
-        this._hpFill.setSize((BAR_W - 4) * hpRatio, BAR_H - 4);
-        this._hpFill.setFillStyle(
-            hpRatio > 0.5 ? 0x2ecc71 : hpRatio > 0.25 ? 0xf1c40f : 0xe74c3c
-        );
+        const bx = this._hpBarX;
+        const by = this._hpBarY - BAR_H / 2;
+        this._hpBar.clear();
+        this._hpBar.fillStyle(0x000000);
+        this._hpBar.fillRect(bx - 1, by - 1, BAR_W + 2, BAR_H + 2);
+        this._hpBar.fillStyle(0x333333);
+        this._hpBar.fillRect(bx, by, BAR_W, BAR_H);
+        this._hpBar.fillStyle(0xcc0000);
+        this._hpBar.fillRect(bx, by, Math.ceil(BAR_W * hpRatio), BAR_H);
         this._hpText.setText(`${Math.max(0, hp)}/${maxHp}`);
 
         // Round e Score

@@ -28,6 +28,7 @@ export default class Boss extends Phaser.Physics.Arcade.Sprite {
         scene.add.existing(this);
         scene.physics.add.existing(this);
 
+        this.setDepth(2);
         this.setScale(1.3);
         this.body.setSize(28, 36);
         this.body.setOffset(18, 20);

@@ -2,12 +2,13 @@
 // main.js (Ponto de Entrada Principal)
 // =================================================
 
-import MenuScene    from './scenes/MenuScene.js';
-import OptionsScene from './scenes/OptionsScene.js';
-import GameScene    from './scenes/GameScene.js';
-import PauseScene   from './scenes/PauseScene.js';
-import UIScene      from './scenes/UIScene.js';
-import PowerUpScene from './scenes/PowerUpScene.js';
+import MenuScene     from './scenes/MenuScene.js';
+import OptionsScene  from './scenes/OptionsScene.js';
+import GameScene     from './scenes/GameScene.js';
+import PauseScene    from './scenes/PauseScene.js';
+import UIScene       from './scenes/UIScene.js';
+import PowerUpScene  from './scenes/PowerUpScene.js';
+import GameOverScene from './scenes/GameOverScene.js';
 
 /**
  * Configuração Global do Motor Phaser 3
@@ -38,7 +39,7 @@ const config = {
         cursor: 'url(assets/images/cursor.png), pointer'
     },
 
-    scene: [MenuScene, OptionsScene, GameScene, PauseScene, UIScene, PowerUpScene]
+    scene: [MenuScene, OptionsScene, GameScene, PauseScene, UIScene, PowerUpScene, GameOverScene]
 };
 
 const game = new Phaser.Game(config);

@@ -39,8 +39,8 @@ export default class PauseScene extends Phaser.Scene {
         }).setOrigin(0.5);
 
         const resumeGame = () => {
-            // Retoma a GameScene e encerra este overlay de pausa
             this.scene.resume('GameScene');
+            this.scene.resume('UIScene');
             this.scene.stop();
         };
 

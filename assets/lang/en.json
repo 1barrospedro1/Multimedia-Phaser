@@ -10,26 +10,49 @@
     "PAUSED": "PAUSED",
     "ROUND": "Round",
     "LEVEL_UP": "LEVEL UP!",
-    "CHOOSE_POWER": "Choose a Power-Up",
-    "PU_SPEED_NAME": "Swift Boots",
-    "PU_SPEED_DESC": "Movement speed +20",
-    "PU_DAMAGE_NAME": "Sharp Arrows",
-    "PU_DAMAGE_DESC": "Arrow damage +10",
-    "PU_FIRERATE_NAME": "Quick Draw",
-    "PU_FIRERATE_DESC": "Fire rate +15%",
-    "PU_HP_NAME": "Iron Heart",
-    "PU_HP_DESC": "+25 max HP & full heal",
-    "PU_MULTIARROW_NAME": "Double Shot",
-    "PU_MULTIARROW_DESC": "Fire 2 arrows at once",
-    "PU_TRIPLEARROW_NAME": "Triple Shot",
-    "PU_TRIPLEARROW_DESC": "Fire 3 arrows at once",
-    "PU_REGEN_NAME": "Regeneration",
-    "PU_REGEN_DESC": "Recover 2 HP per second",
-    "PU_PIERCING_NAME": "Piercing Shot",
-    "PU_PIERCING_DESC": "Arrows pierce through enemies",
+    "CHOOSE_POWER": "Choose an Upgrade",
     "STAT_HP": "HP",
     "STAT_SPD": "SPD",
     "STAT_DMG": "DMG",
     "STAT_RATE": "RATE",
-    "STAT_XP": "XP"
+    "STAT_XP": "XP",
+    "GAME_OVER": "GAME OVER",
+    "SCORE": "Score",
+    "PLAY_AGAIN": "Play Again",
+
+    "PU_HP_NAME": "Vitality",
+    "PU_HP_DESC": "+{v} max HP",
+
+    "PU_DAMAGE_NAME": "Sharp Arrows",
+    "PU_DAMAGE_DESC": "Damage +{v}",
+
+    "PU_ATTACKSPEED_NAME": "Quick Bow",
+    "PU_ATTACKSPEED_DESC": "+{v} attacks/sec",
+
+    "PU_CRITCHANCE_NAME": "Eagle Eye",
+    "PU_CRITCHANCE_DESC": "Crit chance +{v}%",
+
+    "PU_CRITDAMAGE_NAME": "Fatal Strike",
+    "PU_CRITDAMAGE_DESC": "Crit damage +{v}%",
+
+    "PU_AOE_NAME": "Explosive Arrow",
+    "PU_AOE_DESC": "Arrows explode in {v}px on hit",
+
+    "PU_CDREDUCTION_NAME": "Agility",
+    "PU_CDREDUCTION_DESC": "Dash cooldown -{v}%",
+
+    "PU_BOUNCE_NAME": "Ricochet",
+    "PU_BOUNCE_DESC": "Arrows bounce +{v}×",
+
+    "PU_PIERCE_NAME": "Piercing",
+    "PU_PIERCE_DESC": "Arrows pierce +{v} enemy/enemies",
+
+    "PU_SPEED_NAME": "Swift Boots",
+    "PU_SPEED_DESC": "Speed +{v}",
+
+    "PU_DASHES_NAME": "Extra Dash",
+    "PU_DASHES_DESC": "+{v} dash charges",
+
+    "PU_EXTRACHOICE_NAME": "Fate's Luck",
+    "PU_EXTRACHOICE_DESC": "+{v} extra level-up choice"
 }
