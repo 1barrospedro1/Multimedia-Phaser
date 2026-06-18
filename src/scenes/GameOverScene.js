@@ -69,7 +69,7 @@ export default class GameOverScene extends Phaser.Scene {
 
         this.add.text(x, y, textString, {
             fontFamily: 'Antiquity',
-            fontSize: '24px',
+            fontSize: '18px',
             fill: '#000000',
         }).setOrigin(0.5);
 
