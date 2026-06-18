@@ -50,7 +50,7 @@ export default class GameScene extends Phaser.Scene {
             this.load.image(`explosion_${i}`, `assets/Explosion/${i}.png`);
         }
 
-        this.load.audio('hit_hurt', 'assets/Audios/hitHurt.wav');
+        this.load.audio('hit_hurt', 'assets/Audios/hitHurt.ogg');
     }
 
     create() {
