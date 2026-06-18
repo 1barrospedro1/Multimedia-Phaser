@@ -21,53 +21,68 @@ export default class GameOverScene extends Phaser.Scene {
         const lang   = this.registry.get('idioma');
         const textos = this.cache.json.get(lang);
 
-        this.add.rectangle(640, 360, 1280, 720, 0x000000, 0.82);
+        // ── Overlay escurecido com fade-in ──
+        const overlay = this.add.rectangle(640, 360, 1280, 720, 0x000000, 0.82).setAlpha(0);
+        this.tweens.add({ targets: overlay, alpha: 1, duration: 400, ease: 'Sine.out' });
 
-        const container = this.add.image(640, 410, 'ui_container');
-        container.setScale(4);
+        // ── Painel de madeira: "pop" a entrar ──
+        const container = this.add.image(640, 410, 'ui_container').setScale(0);
+        this.tweens.add({ targets: container, scale: 4, duration: 500, ease: 'Back.out', delay: 150 });
 
-        this.add.text(640, 130, textos.GAME_OVER, {
+        // ── Título GAME OVER: fade + scale a entrar ──
+        const title = this.add.text(640, 135, textos.GAME_OVER, {
             fontFamily: 'Antiquity',
             fontSize: '72px',
             fill: '#ff4444',
             stroke: '#000000',
             strokeThickness: 8
-        }).setOrigin(0.5);
+        }).setOrigin(0.5).setScale(0.6).setAlpha(0);
+        this.tweens.add({ targets: title, scale: 1, alpha: 1, duration: 450, ease: 'Back.out', delay: 200 });
 
-        this.add.text(640, 290, `${textos.SCORE}: ${this.finalScore}`, {
+        // ── Conteúdo do painel (score, ronda, botões): fade-in depois do painel ──
+        const content = [];
+
+        content.push(this.add.text(640, 346, `${textos.SCORE}: ${this.finalScore}`, {
             fontFamily: 'Antiquity',
-            fontSize: '32px',
+            fontSize: '34px',
             fill: '#f4d03f',
             stroke: '#000000',
-            strokeThickness: 4
-        }).setOrigin(0.5);
+            strokeThickness: 5
+        }).setOrigin(0.5));
 
-        this.add.text(640, 340, `${textos.ROUND}: ${this.finalRound}`, {
+        content.push(this.add.text(640, 388, `${textos.ROUND}: ${this.finalRound}`, {
             fontFamily: 'Antiquity',
-            fontSize: '24px',
+            fontSize: '28px',
             fill: '#ffffff',
             stroke: '#000000',
             strokeThickness: 3
-        }).setOrigin(0.5);
+        }).setOrigin(0.5));
 
-        this.createButton(640, 440, textos.PLAY_AGAIN, () => {
+        content.push(...this.createButton(640, 448, textos.PLAY_AGAIN, () => {
             this.scene.stop('GameOverScene');
             this.scene.stop('GameScene');
             this.scene.start('GameScene');
-        });
+        }));
 
-        this.createButton(640, 530, textos.MAIN_MENU, () => {
+        content.push(...this.createButton(640, 535, textos.MAIN_MENU, () => {
             this.scene.stop('GameOverScene');
             this.scene.stop('GameScene');
             this.scene.start('MenuScene');
-        });
+        }));
+
+        content.forEach(obj => obj.setAlpha(0));
+        this.tweens.add({ targets: content, alpha: 1, duration: 350, ease: 'Sine.out', delay: 450 });
     }
 
+    /**
+     * Cria um botão interativo (imagem + texto) com feedback de hover/clique.
+     * @returns {Phaser.GameObjects.GameObject[]} Objetos criados, para animação de entrada
+     */
     createButton(x, y, textString, callback) {
         const btnImage = this.add.image(x, y, 'btn_normal').setInteractive();
         btnImage.setScale(0.5);
 
-        this.add.text(x, y, textString, {
+        const label = this.add.text(x, y, textString, {
             fontFamily: 'Antiquity',
             fontSize: '18px',
             fill: '#000000',
@@ -77,5 +92,7 @@ export default class GameOverScene extends Phaser.Scene {
         btnImage.on('pointerout',   () => btnImage.clearTint());
         btnImage.on('pointerdown',  () => btnImage.setTint(0x888888));
         btnImage.on('pointerup',    () => { btnImage.clearTint(); callback(); });
+
+        return [btnImage, label];
     }
 }
