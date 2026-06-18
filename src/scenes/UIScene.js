@@ -222,6 +222,9 @@ export default class UIScene extends Phaser.Scene {
             round: this._game.round
         });
         this.scene.bringToTop('GameOverScene');
+
+        // Esconde a HUD do jogo para não duplicar a informação do painel de derrota
+        this.scene.stop('UIScene');
     }
 
     /**
