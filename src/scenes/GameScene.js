@@ -32,10 +32,10 @@ export default class GameScene extends Phaser.Scene {
         this.load.spritesheet('enemy_hurt',  'assets/sprites/enemy/orc_hurt.png',  f);
         this.load.spritesheet('enemy_death', 'assets/sprites/enemy/orc_death.png', f);
 
-        this.load.spritesheet('boss_idle',  'assets/sprites/Boss/Idle.png',            { frameWidth: 64, frameHeight: 64 });
-        this.load.spritesheet('boss_walk',  'assets/sprites/Boss/orc1_walk_full.png',  { frameWidth: 64, frameHeight: 59 });
-        this.load.spritesheet('boss_hurt',  'assets/sprites/Boss/orc1_hurt_full.png',  { frameWidth: 64, frameHeight: 63 });
-        this.load.spritesheet('boss_death', 'assets/sprites/Boss/orc1_death_full.png', { frameWidth: 64, frameHeight: 64 });
+        this.load.spritesheet('boss_idle',  'assets/sprites/Boss/Idle.png',            f);
+        this.load.spritesheet('boss_walk',  'assets/sprites/Boss/orc1_walk_full.png',  f);
+        this.load.spritesheet('boss_hurt',  'assets/sprites/Boss/orc1_hurt_full.png',  f);
+        this.load.spritesheet('boss_death', 'assets/sprites/Boss/orc1_death_full.png', f);
 
         this.load.image('arrow', 'assets/sprites/arrow.png');
 

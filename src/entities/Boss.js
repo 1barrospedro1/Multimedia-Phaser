@@ -31,7 +31,7 @@ export default class Boss extends Phaser.Physics.Arcade.Sprite {
         this.setDepth(2);
         this.setScale(1.3);
         this.body.setSize(28, 36);
-        this.body.setOffset(18, 20);
+        this.body.setOffset(36, 40);
         this.setCollideWorldBounds(true);
 
         /** Jogador perseguido. */

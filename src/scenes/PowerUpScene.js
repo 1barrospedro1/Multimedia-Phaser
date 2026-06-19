@@ -103,7 +103,7 @@ export default class PowerUpScene extends Phaser.Scene {
         const result  = [];
         const usedIds = new Set();
 
-        for (let i = 0; i < count; i++) {
+        for (let i = 0; i < count; i++) {   
             let card = null;
             let attempts = 0;
 
