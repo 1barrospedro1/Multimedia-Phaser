@@ -1,4 +1,4 @@
-# [HordeBreaker] - TP2 Phaser 3
+# HordeBreaker - TP2 Phaser 3
 
 ## Group Members
 * **Pedro Barros** - Number: 33248 
@@ -6,7 +6,7 @@
 
 ## Project Setup
 * **Phaser Version:** v3.90.0
-* **Inclusion Method:** npm
+* **Inclusion Method:** CDN (npm is only used for the local dev server, `serve`.)
 * **GitHub Pages:** https://1barrospedro1.github.io/Multimedia-Phaser/
 
 ## Game Description
@@ -70,7 +70,7 @@
 - Map: Tiled (JSON), 40×25 tiles of 32px.
 - Total asset size: within the recommended <10 MB limit
 - Origin/creation: [Font+ (Antiquity Print)](https://ninjikin.itch.io/font-antiquity-script), [Pixel Art Top Down - Basic](https://cainos.itch.io/pixel-art-top-down-basic), [Tiny RPG Character Asset Pack](https://zerie.itch.io/tiny-rpg-character-asset-pack), [Pixel HUD UI: Fantasy RPG Kit](https://indigolay.itch.io/pixel-hud-ui), [Pixel Explosion](https://nyknck.itch.io/explosion), [pixabay](https://pixabay.com), [sfxr](https://sfxr.me/) and generated/modified with AI.
-- Justification: 
+- Justification: OGG (lossy) keeps audio small versus raw WAV; JPG is used for the photographic menu background and PNG for pixel-art sprites/UI where crisp edges and transparency matter; sprite sheets use small fixed frame sizes and are scaled in-engine, so no texture is oversized for its on-screen use; the level is stored as compact Tiled JSON. Total assets stay around 4 MB, well under the 10 MB limit.
 
 ## Languages
 - PT / EN / FR, selectable from the Options menu (and from pause).
