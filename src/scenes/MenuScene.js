@@ -29,6 +29,7 @@ export default class MenuScene extends Phaser.Scene {
         this.load.image('menu_bg', 'assets/images/menu_background.jpg');
         this.load.image('btn_normal', 'assets/images/scroll_button.png');
         this.load.audio('menu_music', 'assets/Audios/MainMenu.ogg');
+        this.load.audio('click_sfx', 'assets/Audios/ClickSound.ogg');
 
         // Ficheiros de idioma (en/pt) para o sistema de localização
         this.load.json('en', 'assets/lang/en.json');
@@ -114,7 +115,8 @@ export default class MenuScene extends Phaser.Scene {
         });
 
         btnImage.on('pointerdown', () => {
-            btnImage.setTint(0x888888); 
+            btnImage.setTint(0x888888);
+            this.sound.play('click_sfx', { volume: 0.6 }); 
         });
 
         btnImage.on('pointerup', () => {

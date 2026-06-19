@@ -90,7 +90,7 @@ export default class GameOverScene extends Phaser.Scene {
 
         btnImage.on('pointerover',  () => btnImage.setTint(0xdddddd));
         btnImage.on('pointerout',   () => btnImage.clearTint());
-        btnImage.on('pointerdown',  () => btnImage.setTint(0x888888));
+        btnImage.on('pointerdown',  () => { btnImage.setTint(0x888888); this.sound.play('click_sfx', { volume: 0.6 }); });
         btnImage.on('pointerup',    () => { btnImage.clearTint(); callback(); });
 
         return [btnImage, label];
