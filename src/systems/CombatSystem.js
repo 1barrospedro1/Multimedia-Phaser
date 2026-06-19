@@ -62,10 +62,10 @@ export default class CombatSystem {
             scene.sound.play('hit_hurt');
             this._lastHitSound = now;
         }
-
+            
         if (player.aoeRadius > 0) {
             const damageRadius = player.aoeRadius;
-            const visualSize   = Math.min(damageRadius * 4, 150);
+            const visualSize   = Math.min(45 + damageRadius * 0.5, 75);
             const aoeGfx = scene.add.sprite(enemy.x, enemy.y, 'explosion_1')
                 .setDisplaySize(visualSize, visualSize)
                 .setDepth(1);
