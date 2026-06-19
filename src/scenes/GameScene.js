@@ -37,7 +37,6 @@ export default class GameScene extends Phaser.Scene {
         this.load.spritesheet('boss_death', 'assets/sprites/Boss/orc1_death_full.png', { frameWidth: 64, frameHeight: 64 });
 
         this.load.image('arrow', 'assets/sprites/arrow.png');
-        this.load.image('vida_tab', 'assets/tilesets/VidaTab.png');
 
         this.load.image('hp_bg',    'assets/Lifebar/UI_StatusBar_Bg.png');
         this.load.image('hp_fill',  'assets/Lifebar/UI_StatusBar_Fill_HP.png');
