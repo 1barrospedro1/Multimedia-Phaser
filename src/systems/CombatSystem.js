@@ -22,25 +22,16 @@ export default class CombatSystem {
         }
         if (!nearest) return;
 
-        const baseAngle = Phaser.Math.Angle.Between(scene.player.x, scene.player.y, nearest.x, nearest.y);
-        const count = scene.player.arrowCount;
+        const angle = Phaser.Math.Angle.Between(scene.player.x, scene.player.y, nearest.x, nearest.y);
 
-        const spread = Phaser.Math.DegToRad(15);
-        const offsets = count === 1 ? [0]
-                      : count === 2 ? [-spread / 2, spread / 2]
-                      :               [-spread, 0, spread];
-
-        for (const offset of offsets) {
-            const angle = baseAngle + offset;
-            const arrow = scene.arrows.create(scene.player.x, scene.player.y, 'arrow');
-            arrow.setScale(0.7);
-            arrow.setRotation(angle);
-            arrow.piercing    = scene.player.piercing;
-            arrow.pierceMax   = scene.player.pierceCount;
-            arrow._hitEnemies = new Set();
-            scene.physics.velocityFromRotation(angle, 380, arrow.body.velocity);
-            scene.time.delayedCall(1500, () => arrow.active && arrow.destroy());
-        }
+        const arrow = scene.arrows.create(scene.player.x, scene.player.y, 'arrow');
+        arrow.setScale(0.7);
+        arrow.setRotation(angle);
+        arrow.piercing     = scene.player.piercing;
+        arrow.pierceMax    = scene.player.pierceCount;
+        arrow._hitEnemies  = new Set();
+        scene.physics.velocityFromRotation(angle, 380, arrow.body.velocity);
+        scene.time.delayedCall(1500, () => arrow.active && arrow.destroy());
 
         scene.player.setFlipX(nearest.x < scene.player.x);
     }
@@ -49,12 +40,12 @@ export default class CombatSystem {
         const { scene } = this;
         if (!arrow.active || enemy.dying) return;
 
-        const player = scene.player;
-
         if (arrow.piercing) {
             if (arrow._hitEnemies.has(enemy)) return;
             arrow._hitEnemies.add(enemy);
         }
+
+        const player = scene.player;
 
         let dmg = player.damage;
         let isCrit = false;
@@ -72,26 +63,23 @@ export default class CombatSystem {
         }
 
         if (player.aoeRadius > 0) {
-            const size = player.aoeRadius;
+            const damageRadius = player.aoeRadius;
+            const visualSize   = Math.min(damageRadius * 4, 150);
             const aoeGfx = scene.add.sprite(enemy.x, enemy.y, 'explosion_1')
-                .setDisplaySize(size, size)
+                .setDisplaySize(visualSize, visualSize)
                 .setDepth(1);
             aoeGfx.play('explosion');
             aoeGfx.once('animationcomplete', () => aoeGfx.destroy());
             for (const other of scene.enemies.getChildren()) {
                 if (other === enemy || other.dying || !other.active) continue;
                 const d = Phaser.Math.Distance.Between(enemy.x, enemy.y, other.x, other.y);
-                if (d <= player.aoeRadius) {
+                if (d <= damageRadius) {
                     this._dealDamage(other, Math.max(1, Math.floor(dmg * 0.5)), false);
                 }
             }
         }
-
-        if (arrow.piercing) {
-            if (arrow._hitEnemies.size >= arrow.pierceMax) arrow.destroy();
-            return;
-        }
-
+    
+            // Ricochete e perfuração
         if (player.bounceCount > 0 && (arrow._bounces || 0) < player.bounceCount) {
             let nextTarget = null;
             let nearestDist = Infinity;
@@ -110,6 +98,8 @@ export default class CombatSystem {
                 return;
             }
         }
+
+        if (arrow.piercing && arrow._hitEnemies.size <= arrow.pierceMax) return;
 
         arrow.destroy();
     }
@@ -134,7 +124,7 @@ export default class CombatSystem {
             if (leveledUp) scene._triggerLevelUp();
             scene.updateHud();
 
-            if (Math.random() < 0.005) {
+            if (Math.random() < 0.002) {
                 const potion = scene.potions.create(enemy.x, enemy.y, 'hp_potion').setScale(0.15).refreshBody();
                 potion.pickupAt = scene.time.now + 500;
             }

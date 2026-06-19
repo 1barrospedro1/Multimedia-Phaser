@@ -4,7 +4,7 @@
 
 export default class Player extends Phaser.Physics.Arcade.Sprite {
     static BASE_SPEED     = 170;
-    static BASE_DAMAGE    = 120;
+    static BASE_DAMAGE    = 25;
     static BASE_FIRE_RATE = 700;
     static BASE_XP_TO_LEVEL = 200;
     static XP_PER_KILL    = 10;
@@ -34,9 +34,6 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         this.speed      = Player.BASE_SPEED;
         this.damage     = Player.BASE_DAMAGE;
         this.fireRate   = Player.BASE_FIRE_RATE;
-        this.arrowCount = 1;
-        this.piercing   = false;
-        this.pierceCount    = 0;   // máx. inimigos que cada seta pode perfurar
         this.regenPerSec    = 0;
         this.regenPausedUntil = 0;
 
@@ -46,7 +43,10 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         this.critDamageBonus = 0;  // % bónus no multiplicador (base 2× + este valor)
         this.aoeRadius     = 0;    // raio de explosão em px
         this.bounceCount   = 0;    // ricochetes por seta
+        this.piercing      = false;
+        this.pierceCount   = 0;    // máx. inimigos que cada seta pode perfurar
         this.extraChoices  = 0;    // escolhas extra no ecrã de level-up
+        this.collectedUpgrades = {}; // { id: Set<tier> } — tiers já apanhados por upgrade
 
         // --- Sistema de dash com cargas ---
         this.isDashing            = false;
@@ -106,7 +106,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     /** Aplica um upgrade { id, tier, value } ao jogador. */
-    applyPowerUp({ id, value }) {
+    applyPowerUp({ id, tier, value }) {
         switch (id) {
             case 'hp':
                 this.maxHp += value;
@@ -152,6 +152,9 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
                 this.extraChoices += value;
                 break;
         }
+
+        if (!this.collectedUpgrades[id]) this.collectedUpgrades[id] = new Set();
+        this.collectedUpgrades[id].add(tier);
     }
 
     static createAnims(scene) {

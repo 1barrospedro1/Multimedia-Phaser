@@ -289,14 +289,14 @@ export default class UIScene extends Phaser.Scene {
     }
 
     refresh({ hp, maxHp, score, round, xp, xpToLevel }) {
-        const { BAR_W, BAR_H } = UIScene;
+        const textos = this.cache.json.get(this.registry.get('idioma'));
 
         this.updateHealthBar(hp, maxHp);
         this._hpText.setText(`${Math.max(0, hp)}/${maxHp}`);
 
         // Round e Score
-        this._roundText.setText(`Round: ${round}`);
-        this._scoreText.setText(`Score: ${score}`);
+        this._roundText.setText(`${textos.ROUND}: ${round}`);
+        this._scoreText.setText(`${textos.SCORE}: ${score}`);
 
         // Barra de XP
         const xpRatio  = xpToLevel ? Math.min(xp / xpToLevel, 1) : 0;

@@ -54,5 +54,11 @@
     "PU_DASHES_DESC": "+{v} cargas de dash",
 
     "PU_EXTRACHOICE_NAME": "Sorte do Destino",
-    "PU_EXTRACHOICE_DESC": "+{v} opção extra ao subir nível"
+    "PU_EXTRACHOICE_DESC": "+{v} opção extra ao subir nível",
+
+    "TIER_COMMON": "● COMUM",
+    "TIER_RARE": "★ RARO",
+    "TIER_EPIC": "✦ ÉPICO",
+    "TIER_LEGENDARY": "♦ LENDÁRIO",
+    "TIER_MYTHIC": "✵ MÍTICO"
 }

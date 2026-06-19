@@ -5,7 +5,10 @@
 export default class PowerUpScene extends Phaser.Scene {
 
     /** Probabilidade de cada raridade aparecer (soma = 100). */
-    static TIER_WEIGHTS = { common: 50, rare: 25, epic: 15, legendary: 7, mythic: 3 };
+    static TIER_WEIGHTS = { common: 45, rare: 30, epic: 17, legendary: 6, mythic: 2 };
+
+    /** Ordem de progressão de tiers. */
+    static TIER_ORDER = ['common', 'rare', 'epic', 'legendary', 'mythic'];
 
     /** Estilo visual de cada raridade. */
     static TIER_STYLES = {
@@ -31,7 +34,7 @@ export default class PowerUpScene extends Phaser.Scene {
         { id: 'attackspeed', icon: '⚡',  tiers: { common: 0.3, rare: 0.45, epic: 0.6, legendary: 1.0, mythic: 1.5 } },
         { id: 'critchance',  icon: '🎯',  tiers: { common: 5,  rare: 7,   epic: 10,  legendary: 15,  mythic: 25  } },
         { id: 'critdamage',  icon: '💥',  tiers: { rare: 75,  epic: 100, legendary: 150, mythic: 250 } },
-        { id: 'aoe',         icon: '🔥',  tiers: { rare: 90,  epic: 45,  legendary: 60,  mythic: 90  } },
+        { id: 'aoe',         icon: '🔥',  tiers: { rare: 10,  epic: 18,  legendary: 30,  mythic: 50  } },
         { id: 'cdreduction', icon: '⏱️',  tiers: { rare: 10,  epic: 15,  legendary: 20,  mythic: 30  } },
         { id: 'bounce',      icon: '↩️',  tiers: { legendary: 1, mythic: 2 } },
         { id: 'pierce',      icon: '🔱',  tiers: { legendary: 1, mythic: 2 } },
@@ -95,9 +98,8 @@ export default class PowerUpScene extends Phaser.Scene {
     }
 
     _pickCards(count, player) {
-        const result    = [];
-        const usedIds   = new Set();
-        const usedTiers = new Set();
+        const result  = [];
+        const usedIds = new Set();
 
         for (let i = 0; i < count; i++) {
             let card = null;
@@ -106,12 +108,11 @@ export default class PowerUpScene extends Phaser.Scene {
             while (!card && attempts < 60) {
                 attempts++;
                 const tier = this._pickTier();
-                if (usedTiers.has(tier)) continue;
 
                 const available = PowerUpScene.UPGRADES.filter(u =>
                     u.tiers[tier] !== undefined &&
                     !usedIds.has(u.id) &&
-                    this._isValid(u.id, player)
+                    this._isValid(u.id, tier, player)
                 );
                 if (available.length === 0) continue;
 
@@ -122,16 +123,25 @@ export default class PowerUpScene extends Phaser.Scene {
             if (card) {
                 result.push(card);
                 usedIds.add(card.id);
-                usedTiers.add(card.tier);
             }
         }
 
         return result;
     }
 
-    _isValid(id, player) {
+    _isValid(id, tier, player) {
         if (id === 'extrachoice' && player.extraChoices >= 3) return false;
-        if (id === 'pierce' && player.pierceCount >= 5)       return false;
+        if (player.collectedUpgrades?.[id]?.has(tier))        return false;
+
+        const upgrade  = PowerUpScene.UPGRADES.find(u => u.id === id);
+        const tierIdx  = PowerUpScene.TIER_ORDER.indexOf(tier);
+        for (let i = 0; i < tierIdx; i++) {
+            const lower = PowerUpScene.TIER_ORDER[i];
+            if (upgrade.tiers[lower] !== undefined) {
+                const collected = player.collectedUpgrades?.[id];
+                if (!collected?.has(lower)) return false;
+            }
+        }
         return true;
     }
 
@@ -170,8 +180,11 @@ export default class PowerUpScene extends Phaser.Scene {
 
         // Badge de raridade
         const tierNames = {
-            common: '● COMUM', rare: '★ RARO', epic: '✦ ÉPICO',
-            legendary: '♦ LENDÁRIO', mythic: '✵ MÍTICO'
+            common:    textos.TIER_COMMON,
+            rare:      textos.TIER_RARE,
+            epic:      textos.TIER_EPIC,
+            legendary: textos.TIER_LEGENDARY,
+            mythic:    textos.TIER_MYTHIC,
         };
         this.add.text(cx, cy + 100, tierNames[card.tier] ?? card.tier, {
             fontFamily: 'Antiquity', fontSize: '12px', fill: style.label

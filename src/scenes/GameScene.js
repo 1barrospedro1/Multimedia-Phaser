@@ -81,7 +81,6 @@ export default class GameScene extends Phaser.Scene {
 
         for (const layer of wallLayers) {
             this.physics.add.collider(this.player, layer);
-            this.physics.add.collider(this.enemies, layer);
         }
         this.physics.add.collider(this.enemies, this.enemies);
 
@@ -136,19 +135,22 @@ export default class GameScene extends Phaser.Scene {
         const groundTs = map.addTilesetImage('TX Tileset Stone Ground', 'ground_tiles');
         const all = [grassTs, propsTs, plantsTs, structTs, wallTs, groundTs];
 
-        map.createLayer('chao',      all, 0, 0);
-        map.createLayer('spawn',     all, 0, 0);
-        map.createLayer('heals',     all, 0, 0);
-        map.createLayer('cima_chao', all, 0, 0);
-        const objetosLayer  = map.createLayer('Objetos',  all, 0, 0);
-        const objetos2Layer = map.createLayer('objetos2', all, 0, 0);
+        map.createLayer('chao',       all, 0, 0);
+        map.createLayer('spawn',      all, 0, 0);
+        const healsLayer     = map.createLayer('heals',     all, 0, 0);
+        const cimachaoLayer  = map.createLayer('cima_chao', all, 0, 0);
+        const objetosLayer   = map.createLayer('Objetos',   all, 0, 0);
+        const objetos2Layer  = map.createLayer('objetos2',  all, 0, 0);
 
         this.mapWidth  = map.widthInPixels;
         this.mapHeight = map.heightInPixels;
 
-        const wallLayers = [objetosLayer, objetos2Layer];
-        for (const layer of wallLayers) layer.setCollisionBetween(577, 832);
-        return wallLayers;
+        const solidLayers = [objetosLayer, objetos2Layer];
+        for (const layer of [...solidLayers, healsLayer, cimachaoLayer]) {
+            layer.setCollisionByProperty({ collides: true });
+        }
+
+        return [...solidLayers, healsLayer, cimachaoLayer];
     }
 
     updateHud() {

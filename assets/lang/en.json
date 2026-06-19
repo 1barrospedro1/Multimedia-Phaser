@@ -54,5 +54,11 @@
     "PU_DASHES_DESC": "+{v} dash charges",
 
     "PU_EXTRACHOICE_NAME": "Fate's Luck",
-    "PU_EXTRACHOICE_DESC": "+{v} extra level-up choice"
+    "PU_EXTRACHOICE_DESC": "+{v} extra level-up choice",
+
+    "TIER_COMMON": "● COMMON",
+    "TIER_RARE": "★ RARE",
+    "TIER_EPIC": "✦ EPIC",
+    "TIER_LEGENDARY": "♦ LEGENDARY",
+    "TIER_MYTHIC": "✵ MYTHIC"
 }
