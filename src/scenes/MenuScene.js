@@ -8,6 +8,8 @@
  * e navegação para o jogo, opções ou encerramento da aplicação.
  * @extends Phaser.Scene
  */
+import MusicManager from '../systems/MusicManager.js';
+
 export default class MenuScene extends Phaser.Scene {
     /**
      * Inicializa a cena com o identificador 'MenuScene'.
@@ -26,7 +28,8 @@ export default class MenuScene extends Phaser.Scene {
         this.load.image('ui_container', 'assets/images/ui_container.png');
         this.load.image('menu_bg', 'assets/images/menu_background.jpg');
         this.load.image('btn_normal', 'assets/images/scroll_button.png');
-        
+        this.load.audio('menu_music', 'assets/Audios/MainMenu.ogg');
+
         // Ficheiros de idioma (en/pt) para o sistema de localização
         this.load.json('en', 'assets/lang/en.json');
         this.load.json('pt', 'assets/lang/pt.json');
@@ -42,6 +45,8 @@ export default class MenuScene extends Phaser.Scene {
         if (!this.registry.has('idioma')) {
             this.registry.set('idioma', 'en'); 
         }
+
+        MusicManager.play(this, 'menu_music');
 
         const langAtual = this.registry.get('idioma');
         const textos = this.cache.json.get(langAtual);

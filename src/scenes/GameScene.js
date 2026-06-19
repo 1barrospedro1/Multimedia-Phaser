@@ -3,6 +3,7 @@ import Enemy from '../entities/Enemy.js';
 import Boss from '../entities/Boss.js';
 import RoundManager from '../systems/RoundManager.js';
 import CombatSystem from '../systems/CombatSystem.js';
+import MusicManager from '../systems/MusicManager.js';
 
 export default class GameScene extends Phaser.Scene {
 
@@ -55,9 +56,12 @@ export default class GameScene extends Phaser.Scene {
         for (let i = 1; i <= 3; i++) {
             this.load.audio(`dash_${i}`, `assets/Audios/dash_${i}.ogg`);
         }
+        this.load.audio('game_music', 'assets/Audios/GameScene.ogg');
     }
 
     create() {
+        MusicManager.play(this, 'game_music');
+
         const wallLayers = this.buildMap();
 
         this.physics.world.setBounds(0, 0, this.mapWidth, this.mapHeight);
