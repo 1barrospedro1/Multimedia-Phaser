@@ -3,6 +3,7 @@ import Enemy from '../entities/Enemy.js';
 import Boss from '../entities/Boss.js';
 import RoundManager from '../systems/RoundManager.js';
 import CombatSystem from '../systems/CombatSystem.js';
+import MusicManager from '../systems/MusicManager.js';
 
 export default class GameScene extends Phaser.Scene {
 
@@ -37,7 +38,6 @@ export default class GameScene extends Phaser.Scene {
         this.load.spritesheet('boss_death', 'assets/sprites/Boss/orc1_death_full.png', { frameWidth: 64, frameHeight: 64 });
 
         this.load.image('arrow', 'assets/sprites/arrow.png');
-        this.load.image('vida_tab', 'assets/tilesets/VidaTab.png');
 
         this.load.image('hp_bg',    'assets/Lifebar/UI_StatusBar_Bg.png');
         this.load.image('hp_fill',  'assets/Lifebar/UI_StatusBar_Fill_HP.png');
@@ -50,10 +50,19 @@ export default class GameScene extends Phaser.Scene {
             this.load.image(`explosion_${i}`, `assets/Explosion/${i}.png`);
         }
 
-        this.load.audio('hit_hurt', 'assets/Audios/hitHurt.ogg');
+        this.load.audio('hit_hurt',     'assets/Audios/hitHurt.ogg');
+        this.load.audio('powerup_sfx',  'assets/Audios/PowerUp.ogg');
+        this.load.audio('death_sfx',    'assets/Audios/GameOverDeath.ogg');
+        for (let i = 1; i <= 3; i++) {
+            this.load.audio(`dash_${i}`, `assets/Audios/dash_${i}.ogg`);
+        }
+        this.load.audio('game_music', 'assets/Audios/GameScene.ogg');
+        this.load.audio('explosion_sfx', 'assets/Audios/explosion.ogg');
     }
 
     create() {
+        MusicManager.play(this, 'game_music');
+
         const wallLayers = this.buildMap();
 
         this.physics.world.setBounds(0, 0, this.mapWidth, this.mapHeight);
@@ -174,6 +183,7 @@ export default class GameScene extends Phaser.Scene {
 
     gameOver() {
         this.gameIsOver = true;
+        this.sound.play('death_sfx', { volume: 0.6 });
         this.player.dead = true;
         this.player.setVelocity(0, 0);
         this.player.body.enable = false;

@@ -184,6 +184,8 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         this.isDashing = true;
         this.currentDashCharges--;
         this._pendingRecharges++;
+        // Toca um dos 3 sons de dash, escolhido aleatoriamente
+        this.scene.sound.play(`dash_${Phaser.Math.Between(1, 3)}`, { volume: 0.7 });
         this.setTint(0x88ccff);
         this.setAlpha(0.65);
         this.setVelocity(vx * Player.DASH_SPEED, vy * Player.DASH_SPEED);

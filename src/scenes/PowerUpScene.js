@@ -51,6 +51,8 @@ export default class PowerUpScene extends Phaser.Scene {
         const W = this.scale.width;
         const H = this.scale.height;
 
+        this.sound.play('powerup_sfx', { volume: 0.6 });
+
         const lang   = this.registry.get('idioma');
         const textos = this.cache.json.get(lang);
 
@@ -193,7 +195,7 @@ export default class PowerUpScene extends Phaser.Scene {
         // Interatividade
         bg.on('pointerover',  () => bg.setFillStyle(style.hover));
         bg.on('pointerout',   () => bg.setFillStyle(style.bg));
-        bg.on('pointerdown',  () => bg.setFillStyle(0x1a252f));
+        bg.on('pointerdown',  () => { bg.setFillStyle(0x1a252f); this.sound.play('click_sfx', { volume: 0.6 }); });
         bg.on('pointerup',    () => this._choose(card));
     }
 
