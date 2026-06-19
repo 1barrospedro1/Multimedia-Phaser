@@ -59,7 +59,14 @@ export default class OptionsScene extends Phaser.Scene {
             this.scene.restart({ fromScene: sceneToReturn });
         });
 
-        this.createButton(640, 460, textos.BACK, () => {
+        this.createButton(640, 460, this.sound.mute ? textos.UNMUTE : textos.MUTE, () => {
+            // Mute/unmute global (música + efeitos)
+            this.sound.mute = !this.sound.mute;
+            // Reinicia para atualizar o rótulo (Silenciar/Ativar Som)
+            this.scene.restart({ fromScene: sceneToReturn });
+        });
+
+        this.createButton(640, 540, textos.BACK, () => {
             if (sceneToReturn === 'PauseScene') {
                 // Fecha opções e reativa o menu de pausa em sleep
                 this.scene.stop();
