@@ -49,7 +49,12 @@ export default class GameScene extends Phaser.Scene {
             this.load.image(`explosion_${i}`, `assets/Explosion/${i}.png`);
         }
 
-        this.load.audio('hit_hurt', 'assets/Audios/hitHurt.ogg');
+        this.load.audio('hit_hurt',     'assets/Audios/hitHurt.ogg');
+        this.load.audio('powerup_sfx',  'assets/Audios/PowerUp.ogg');
+        this.load.audio('death_sfx',    'assets/Audios/GameOverDeath.ogg');
+        for (let i = 1; i <= 3; i++) {
+            this.load.audio(`dash_${i}`, `assets/Audios/dash_${i}.ogg`);
+        }
     }
 
     create() {
@@ -171,6 +176,7 @@ export default class GameScene extends Phaser.Scene {
 
     gameOver() {
         this.gameIsOver = true;
+        this.sound.play('death_sfx', { volume: 0.6 });
         this.player.dead = true;
         this.player.setVelocity(0, 0);
         this.player.body.enable = false;

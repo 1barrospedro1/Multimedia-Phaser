@@ -48,6 +48,8 @@ export default class PowerUpScene extends Phaser.Scene {
         const W = this.scale.width;
         const H = this.scale.height;
 
+        this.sound.play('powerup_sfx', { volume: 0.6 });
+
         const lang   = this.registry.get('idioma');
         const textos = this.cache.json.get(lang);
 
