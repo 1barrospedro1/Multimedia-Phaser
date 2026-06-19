@@ -50,7 +50,8 @@ export default class OptionsScene extends Phaser.Scene {
         }).setOrigin(0.5);
 
         this.createButton(640, 380, textos.LANG_BTN, () => {
-            const novoIdioma = (langAtual === 'en') ? 'pt' : 'en';
+            const ciclo = { 'en': 'pt', 'pt': 'fr', 'fr': 'en' };
+            const novoIdioma = ciclo[langAtual] ?? 'en';
             
             // Persiste a escolha no Registry para todas as cenas
             this.registry.set('idioma', novoIdioma);

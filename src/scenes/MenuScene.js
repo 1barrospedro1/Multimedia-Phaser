@@ -31,9 +31,10 @@ export default class MenuScene extends Phaser.Scene {
         this.load.audio('menu_music', 'assets/Audios/MainMenu.ogg');
         this.load.audio('click_sfx', 'assets/Audios/ClickSound.ogg');
 
-        // Ficheiros de idioma (en/pt) para o sistema de localização
+        // Ficheiros de idioma (en/pt/fr) para o sistema de localização
         this.load.json('en', 'assets/lang/en.json');
         this.load.json('pt', 'assets/lang/pt.json');
+        this.load.json('fr', 'assets/lang/fr.json');
     }
 
     /**

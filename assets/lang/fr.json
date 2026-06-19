@@ -1,0 +1,66 @@
+{
+    "TITLE": "Hordebreaker",
+    "PLAY": "Jouer",
+    "SETTINGS": "Options",
+    "QUIT": "Quitter",
+    "BACK": "Retour",
+    "MUTE": "Muet",
+    "UNMUTE": "Son activé",
+    "LANG_BTN": "Lang. : FR",
+    "RESUME": "Reprendre",
+    "MAIN_MENU": "Menu",
+    "PAUSED": "PAUSE",
+    "ROUND": "Manche",
+    "LEVEL_UP": "NIVEAU SUPÉRIEUR !",
+    "CHOOSE_POWER": "Choisir une amélioration",
+    "STAT_HP": "PV",
+    "STAT_SPD": "VIT",
+    "STAT_DMG": "DGT",
+    "STAT_RATE": "CADENCE",
+    "STAT_XP": "XP",
+    "GAME_OVER": "GAME OVER",
+    "SCORE": "Score",
+    "PLAY_AGAIN": "Rejouer",
+
+    "PU_HP_NAME": "Vitalité",
+    "PU_HP_DESC": "+{v} PV max",
+
+    "PU_DAMAGE_NAME": "Flèches acérées",
+    "PU_DAMAGE_DESC": "Dégâts +{v}",
+
+    "PU_ATTACKSPEED_NAME": "Arc rapide",
+    "PU_ATTACKSPEED_DESC": "+{v} attaques/sec",
+
+    "PU_CRITCHANCE_NAME": "Œil d'aigle",
+    "PU_CRITCHANCE_DESC": "Chance critique +{v}%",
+
+    "PU_CRITDAMAGE_NAME": "Frappe fatale",
+    "PU_CRITDAMAGE_DESC": "Dégâts critiques +{v}%",
+
+    "PU_AOE_NAME": "Flèche explosive",
+    "PU_AOE_DESC": "Explosion en {v}px à l'impact",
+
+    "PU_CDREDUCTION_NAME": "Agilité",
+    "PU_CDREDUCTION_DESC": "Recharge du dash -{v}%",
+
+    "PU_BOUNCE_NAME": "Ricochet",
+    "PU_BOUNCE_DESC": "Les flèches ricochent +{v}×",
+
+    "PU_PIERCE_NAME": "Perforation",
+    "PU_PIERCE_DESC": "Les flèches traversent +{v} ennemi(s)",
+
+    "PU_SPEED_NAME": "Bottes rapides",
+    "PU_SPEED_DESC": "Vitesse +{v}",
+
+    "PU_DASHES_NAME": "Dash supplémentaire",
+    "PU_DASHES_DESC": "+{v} charge(s) de dash",
+
+    "PU_EXTRACHOICE_NAME": "Chance du destin",
+    "PU_EXTRACHOICE_DESC": "+{v} choix supplémentaire à la montée de niveau",
+
+    "TIER_COMMON": "● COMMUN",
+    "TIER_RARE": "★ RARE",
+    "TIER_EPIC": "✦ ÉPIQUE",
+    "TIER_LEGENDARY": "♦ LÉGENDAIRE",
+    "TIER_MYTHIC": "✵ MYTHIQUE"
+}
