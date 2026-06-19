@@ -7,6 +7,7 @@ export default class CombatSystem {
     constructor(scene) {
         this.scene = scene;
         this._lastHitSound = 0;
+        this._lastExplosionSound = 0;
     }
 
     fireAtNearestEnemy() {
@@ -78,6 +79,10 @@ export default class CombatSystem {
                 .setDepth(1);
             aoeGfx.play('explosion');
             aoeGfx.once('animationcomplete', () => aoeGfx.destroy());
+            if (now - this._lastExplosionSound > 80) {
+                scene.sound.play('explosion_sfx', { volume: 0.8 });
+                this._lastExplosionSound = now;
+            }
             for (const other of scene.enemies.getChildren()) {
                 if (other === enemy || other.dying || !other.active) continue;
                 const d = Phaser.Math.Distance.Between(enemy.x, enemy.y, other.x, other.y);

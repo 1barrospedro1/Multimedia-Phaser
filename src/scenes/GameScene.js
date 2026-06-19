@@ -57,6 +57,7 @@ export default class GameScene extends Phaser.Scene {
             this.load.audio(`dash_${i}`, `assets/Audios/dash_${i}.ogg`);
         }
         this.load.audio('game_music', 'assets/Audios/GameScene.ogg');
+        this.load.audio('explosion_sfx', 'assets/Audios/explosion.ogg');
     }
 
     create() {
