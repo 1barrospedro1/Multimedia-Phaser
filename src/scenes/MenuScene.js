@@ -24,7 +24,6 @@ export default class MenuScene extends Phaser.Scene {
      * @returns {void}
      */
     preload() {
-        this.load.image('cursor', 'assets/images/cursor.png');
         this.load.image('ui_container', 'assets/images/ui_container.png');
         this.load.image('menu_bg', 'assets/images/menu_background.jpg');
         this.load.image('btn_normal', 'assets/images/scroll_button.png');

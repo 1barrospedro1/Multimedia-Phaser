@@ -35,10 +35,6 @@ const config = {
         }
     },
 
-    input: {
-        cursor: 'url(assets/images/cursor.png), pointer'
-    },
-
     scene: [MenuScene, OptionsScene, GameScene, PauseScene, UIScene, PowerUpScene, GameOverScene]
 };
 
