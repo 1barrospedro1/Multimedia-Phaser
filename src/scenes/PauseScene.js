@@ -97,6 +97,7 @@ export default class PauseScene extends Phaser.Scene {
 
         btnImage.on('pointerdown', () => {
             btnImage.setTint(0x888888);
+            this.sound.play('click_sfx', { volume: 0.6 });
         });
 
         btnImage.on('pointerup', () => {

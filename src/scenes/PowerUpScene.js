@@ -182,7 +182,7 @@ export default class PowerUpScene extends Phaser.Scene {
         // Interatividade
         bg.on('pointerover',  () => bg.setFillStyle(style.hover));
         bg.on('pointerout',   () => bg.setFillStyle(style.bg));
-        bg.on('pointerdown',  () => bg.setFillStyle(0x1a252f));
+        bg.on('pointerdown',  () => { bg.setFillStyle(0x1a252f); this.sound.play('click_sfx', { volume: 0.6 }); });
         bg.on('pointerup',    () => this._choose(card));
     }
 
